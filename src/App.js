@@ -4,7 +4,9 @@ import 'rsuite/dist/rsuite-no-reset.min.css';
 import HomeIcon from '@rsuite/icons/legacy/Home';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import SignUp from './pages/signup.js';
+import SignIn from './pages/signin.js';
 import Home from './pages/home.js';
+import './assets/css/login.css';
 
 function App() {
   
@@ -46,6 +48,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />}/>
           <Route path="/signup" element={<SignUp />} />
+          <Route path="/signin" element={<SignIn />} />
         </Routes>
       </Router>
     )
