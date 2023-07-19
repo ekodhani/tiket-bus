@@ -22,7 +22,9 @@ function SignIn() {
                 title: 'Error!',
                 text: 'Form tidak boleh kosong sahabat!',
                 icon: 'error',
-                confirmButtonText: 'Oke'
+                confirmButtonText: 'Oke',
+                allowOutsideClick: false,
+                allowEscapeKey: false
             })
             setLoading(false)
         } else {
@@ -30,7 +32,9 @@ function SignIn() {
                 title: 'Info!',
                 text: 'Backendnya masih ngopi dulu, tunggu ya',
                 icon: 'info',
-                confirmButtonText: 'Oke'
+                confirmButtonText: 'Oke',
+                allowOutsideClick: false,
+                allowEscapeKey: false
             }).then((result) => {
                 if (result.isConfirmed) {
                     setLoading(false)
