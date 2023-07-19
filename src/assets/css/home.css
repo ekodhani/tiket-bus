@@ -1,0 +1,49 @@
+.bg {
+    background: url('../images/bus.jpg');
+    background-size: cover ;
+    background-attachment: fixed;
+}
+
+.top-section {
+    background: #f5f5f5;
+}
+
+.center-image {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.custom-panel {
+    background: #fff;
+}
+
+.custom-panel img {
+    width: 100%;
+    height: 200px;
+    margin-bottom: 10px;
+}
+
+.custom-carousel {
+    background: transparent !important;
+}
+
+.promo {
+    background: rgb(194,245,255);
+    background: linear-gradient(90deg, rgba(194,245,255,1) 0%, rgba(209,209,249,1) 47%, rgba(210,210,210,1) 100%);
+}
+
+.centered-panel {
+    display: flex;
+    justify-content: center;
+}
+
+.centered-img {
+    display: block;
+    margin: 0 auto;
+}
+
+.cta {
+    background: rgb(194,245,255);
+    background: linear-gradient(90deg, rgba(194,245,255,1) 0%, rgba(209,209,249,1) 47%, rgba(210,210,210,1) 100%);
+}

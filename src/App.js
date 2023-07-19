@@ -6,7 +6,6 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import SignUp from './pages/signup.js';
 import SignIn from './pages/signin.js';
 import Home from './pages/home.js';
-import './assets/css/login.css';
 
 function App() {
   
@@ -15,7 +14,7 @@ function App() {
     return (
       <Router>
         <Navbar>
-          <Navbar.Brand>Ticket Bus</Navbar.Brand>
+          <Navbar.Brand>Flw Travel</Navbar.Brand>
           <Nav>
             <Nav.Item icon={<HomeIcon />} href="/">
               Home

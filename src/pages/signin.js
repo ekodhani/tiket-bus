@@ -28,7 +28,7 @@ function SignIn() {
         } else {
             Swal.fire({
                 title: 'Info!',
-                text: 'Back Endnya masih ngopi dulu, tunggu ya',
+                text: 'Backendnya masih ngopi dulu, tunggu ya',
                 icon: 'info',
                 confirmButtonText: 'Oke'
             }).then((result) => {
