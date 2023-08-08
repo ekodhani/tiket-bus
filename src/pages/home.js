@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import { Content, Panel, Row, Col, Form, Button, ButtonToolbar, FlexboxGrid, Loader, DateRangePicker, SelectPicker } from 'rsuite';
+import { Content, Panel, Row, Col, Form, Button, ButtonToolbar, FlexboxGrid, Loader, DateRangePicker, SelectPicker, Avatar } from 'rsuite';
 import '../assets/css/home.css';
 import destinasiOne from '../assets/images/destinasi1.jpeg';
 import destinasiTwo from '../assets/images/destinasi2.jpeg';
@@ -9,6 +9,7 @@ import Swal from 'sweetalert2'
 import Nexide from '../assets/images/partner/nexide.jpg';
 import Girasol from '../assets/images/partner/girasol.jpg';
 import ADR from '../assets/images/partner/akudanrumah.jpg';
+import Navbars from './component/navbar';
 
 function Home() {
     const [dari, setDariMana] = useState('');
@@ -18,9 +19,44 @@ function Home() {
 
     // TESTIMONIAL SECTION
     const Testimonial = () => { 
+        const testimonials = [
+            {
+              name: 'Mentari',
+              job: 'Lawyer',
+              text: 'FLW Travel, keren bisa membuat impianku menjadi nyata',
+              avatarUrl: 'https://mentari.netlify.app/images/ayang.JPG',
+            },
+            {
+                name: 'John Doe',
+                job: 'Web Developer',
+                text: 'Awesome, this page is so simple, tolong translatin ke indonesia ya',
+                avatarUrl: 'https://upload.wikimedia.org/wikipedia/commons/5/5a/John_Doe%2C_born_John_Nommensen_Duchac.jpg',
+            },
+            {
+                name: 'Budi',
+                job: 'Student',
+                text: 'Miaw miaw! Rrrrr',
+                avatarUrl: 'https://cdn0-production-images-kly.akamaized.net/lX3bXgLzPQ_hSqisMK2Kg_40nf8=/640x360/smart/filters:quality(75):strip_icc():format(webp)/kly-media-production/medias/2754932/original/005940800_1552970791-fotoHL_kucing.jpg',
+            },
+            // Tambahkan testimonial lain (jika diperlukan)
+          ];
         return(
         <>
             <h2 style={{ textAlign: 'center'}}>Testimonial</h2>
+            <FlexboxGrid justify="center">
+            {testimonials.map((testimonial, index) => (
+                <FlexboxGrid.Item key={index} colspan={6} style={{ padding: '20px' }}>
+                <Panel bordered>
+                    <div style={{ textAlign: 'center' }}>
+                    <Avatar src={testimonial.avatarUrl} size="lg" circle />
+                    <h4 style={{ margin: '10px 0 5px' }}>{testimonial.name}</h4>
+                    <p style={{ margin: '0', color: 'grey' }}>{testimonial.job}</p>
+                    </div>
+                    <p>{testimonial.text}</p>
+                </Panel>
+                </FlexboxGrid.Item>
+            ))}
+            </FlexboxGrid>
         </>
     )}
 
@@ -69,7 +105,7 @@ function Home() {
                 <Content className='cta' style={{ padding: '30px' }}>
                     <Row style={{ display: 'flex', alignItems: 'center', flexDirection: 'column'}}>
                         <Col xs={12}>
-                            <h2 style={{ color: '#424242', textAlign: 'center'}}>Nikmati Perjalanan Tanpa Ribet, Pesan Tiket Bus Favoritmu Sekarang!</h2>
+                            <h2 style={{ color: '#424242', textAlign: 'center'}}>Nikmati Perjalanan Tanpa Ribet, Pesan Tiketmu Sekarang!</h2>
                         </Col>
                         <Col xs={12} style={{ display: 'flex', alignItems: 'center', flexDirection: 'column'}}>
                             <Button appearance="primary" color="violet" type="submit"><a href="/signup" style={{ color: '#fff', textDecoration: 'none'}}>Sign Up</a></Button>
@@ -131,6 +167,7 @@ function Home() {
 
     return (
         <>
+            <Navbars />
             <Content style={{ padding: '30px'}} className="top-section">
                 <Row className="show-grid center-image">
                     <Col xs={12}>

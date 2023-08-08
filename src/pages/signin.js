@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import { Content, Panel, Form, Button, ButtonToolbar, Grid, Row, Col, Loader} from 'rsuite';
 import Swal from 'sweetalert2'
+import Navbars from './component/navbar';
 
 function SignIn() {
     const [username, setUsername] = useState('');
@@ -9,7 +10,8 @@ function SignIn() {
 
     // HANDLE SUBMIT
     let dataForm = {}
-    const handleSubmit = () => {
+    let url = 'http://localhost:8080/pd/v1';
+    const handleSubmit = async () => {
         if (username !== '' && password !== '') {
             dataForm = {
                 name: username,
@@ -28,25 +30,60 @@ function SignIn() {
             })
             setLoading(false)
         } else {
-            Swal.fire({
-                title: 'Info!',
-                text: 'Backendnya masih ngopi dulu, tunggu ya',
-                icon: 'info',
-                confirmButtonText: 'Oke',
-                allowOutsideClick: false,
-                allowEscapeKey: false
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    setLoading(false)
+            try {
+                const response = await fetch(url + '/signin', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(dataForm),
+                })
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
                 }
-            })
-            console.log(dataForm);
-            setLoading(true)
+                const result = await response.json();
+                console.log(result);
+
+                if (response.ok) {
+                    setLoading(false)
+                    window.location.href = '/menu';
+                    // Simpan data ke session
+                    sessionStorage.setItem('userData', JSON.stringify(result));
+                    console.log(sessionStorage.getItem('userData'))
+                } else {
+                    Swal.fire({
+                        title: result,
+                        text: 'Backendnya masih ngopi dulu, tunggu ya, lagi mikirin caranya nyiapin endpoint',
+                        icon: 'info',
+                        confirmButtonText: 'Oke',
+                        allowOutsideClick: false,
+                        allowEscapeKey: false
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            setLoading(false)
+                        }
+                    })
+                }
+            } catch(error) {
+                Swal.fire({
+                    title: error,
+                    text: 'Backendnya masih error, lagi belajar make golang dia',
+                    icon: 'info',
+                    confirmButtonText: 'Oke',
+                    allowOutsideClick: false,
+                    allowEscapeKey: false
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        setLoading(false)
+                    }
+                })
+            }
         }
     }
 
     return (
     <>
+    <Navbars />
     <Grid fluid>
         <Row className="show-grid">
             <Col xs={12}>

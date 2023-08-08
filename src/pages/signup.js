@@ -1,32 +1,31 @@
 import React, {useState} from 'react';
+import useQrReader from 'react-qr-reader';
 import { Content, Panel, Form, Button, ButtonToolbar, SelectPicker, Grid, Row, Col, Loader} from 'rsuite';
 import { Link } from 'react-router-dom';
 import Swal from 'sweetalert2'
+import Navbars from './component/navbar';
 
 function SignUp() {
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
-    const [genderValue, setGender] = useState('');
+    const [noTelp, setNoTelp] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [loading, setLoading] = useState(false);
 
-    // DATA GENDER
-    const gender = ['Male', 'Female'].map(item => ({
-        label: item,
-        value: item
-    }));
-
     // HANDLE SUBMIT
     let dataForm = {}
-    const handleSubmit = () => {
-        if (username !== '' && password !== '' && confirmPassword !== '' && genderValue !== '' && email !== '') {
+    const handleSubmit = async () => {
+        let url = 'http://localhost:8080/pd/v1';
+        if (username !== '' && password !== '' && confirmPassword !== '' && email !== '' && noTelp !== '') {
             dataForm = {
                 name: username,
                 email: email,
-                gender: genderValue,
+                no_telp:noTelp,
                 password: password,
                 confirm_password: confirmPassword,
+                id_role: '2',
+                image: 'default.jpg'
             }
         }
 
@@ -51,25 +50,71 @@ function SignUp() {
             })
             setLoading(false)
         } else {
-            Swal.fire({
-                title: 'Info!',
-                text: 'Backendnya masih ngopi dulu, tunggu ya',
-                icon: 'info',
-                confirmButtonText: 'Oke',
-                allowOutsideClick: false,
-                allowEscapeKey: false
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    setLoading(false)
-                }
-            })
             console.log(dataForm);
             setLoading(true)
+            try {
+                const response = await fetch(url + '/signup', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(dataForm),
+                })
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                const result = await response.json();
+
+                if (response.ok) {
+                    setLoading(false)
+                    Swal.fire({
+                        title: 'Berhasil',
+                        text: 'Backendnya dah bisa nih, user dengan username : ' +result.name+' telah terdaftar',
+                        icon: 'success',
+                        confirmButtonText: 'Login',
+                        allowOutsideClick: false,
+                        allowEscapeKey: false
+                    }).then((result) => {
+                        // Arahkan ke Page Login
+                        if (result.isConfirmed) {
+                            window.location.href = '/signin'; // Perbaiki di sini
+                        }
+                    })
+                } else {
+                    Swal.fire({
+                        title: result,
+                        text: 'Backendnya masih ngopi dulu, tunggu ya, lagi mikirin caranya nyiapin endpoint',
+                        icon: 'info',
+                        confirmButtonText: 'Oke',
+                        allowOutsideClick: false,
+                        allowEscapeKey: false
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            setLoading(false)
+                        }
+                    })
+                }
+                console.log(result)
+            } catch(error) {
+                Swal.fire({
+                    title: error,
+                    text: 'Backendnya masih error, lagi belajar make golang dia',
+                    icon: 'info',
+                    confirmButtonText: 'Oke',
+                    allowOutsideClick: false,
+                    allowEscapeKey: false
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        setLoading(false)
+                    }
+                })
+            }
         }
     }
 
     return (
     <>
+    <Navbars />
     <Grid fluid>
         <Row className="show-grid">
             <Col xs={12}>
@@ -80,11 +125,11 @@ function SignUp() {
                         <Form.Group controlId="name">
                             <Form.Control name="name" placeholder='Username' value={username} onChange={(e) => setUsername(e)}/>
                         </Form.Group>
-                        <Form.Group controlId="email">
-                            <Form.Control name="email" type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e)}/>
+                        <Form.Group controlId="no_telp">
+                            <Form.Control name="no_telp" type="text" placeholder="Phone" value={noTelp} onChange={(e) => setNoTelp(e)}/>
                         </Form.Group>
-                        <Form.Group controlId="selectPicker">
-                            <SelectPicker name="gender" data={gender} block searchable={false} value={genderValue} placeholder="Select Gender" onChange={(e) => setGender(e)}/>
+                        <Form.Group controlId="email">
+                            <Form.Control name="email" type="email" placeholder="email" value={email} onChange={(e) => setEmail(e)}/>
                         </Form.Group>
                         <Form.Group controlId="password">
                             <Form.Control name="password" type="password" autoComplete="off" value={password} placeholder="Password" onChange={(e) => setPassword(e)}/>
