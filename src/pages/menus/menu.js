@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import SideNavMenu from '../component/sideNavMenu';
 import NavbarMenu from '../component/navbarMenu';
 import image from '../../assets/images/default.jpg'
-import { Container, Panel, Steps, Checkbox, Form, Button, Rate, SelectPicker, DatePicker, ButtonToolbar, Grid, Row, Col, Toggle, RadioTileGroup, RadioTile } from 'rsuite';
+import { Container, Panel, Steps, Checkbox, CheckboxGroup, Form, Button, Rate, SelectPicker, DatePicker, ButtonToolbar, Grid, Row, Col, Toggle, RadioTileGroup, RadioTile } from 'rsuite';
 import SearchIcon from '@rsuite/icons/Search';
 import Swal from 'sweetalert2'
 
@@ -20,7 +20,7 @@ function Menu() {
     const [dataForm, setDataForm] = useState({});
     const [pP, setPP] = useState(false);
     const [DataKursi, setDataKursi] = useState();
-    const [pilihKursi, setPilihKursi] = useState();
+    const [pilihKursi, setPilihKursi] = useState([]);
     const [pilihPembayaran, setPembayaran] = useState('');
     const [hoverValue, setHoverValue] = React.useState(3);
     let url = 'http://localhost:8080/pd/v1';
@@ -95,28 +95,30 @@ function Menu() {
 
     const Kursi = () => {
         const columnsPerRow = 2; // Jumlah kolom per baris
-
+        
         const rows = [];
         for (let i = 0; i < DataKursi.length; i += columnsPerRow) {
             const rowCols = DataKursi.slice(i, i + columnsPerRow).map((kursi) => (
-            <Col key={kursi.id} style={{ marginRight: '20px', width: '40px'}}>
-                <Checkbox value={kursi.id} onChange={(e) => handlePilihKursi(e)}>{kursi.no_kursi}</Checkbox>
+            <Col style={{ marginRight: '20px', width: '40px'}}>
+                <Checkbox key={kursi.id} value={kursi.id}>{kursi.no_kursi}</Checkbox>
             </Col>
             ));
 
             rows.push(<Row key={i}>{rowCols}</Row>);
         }
-
-        const handlePilihKursi = (e) => {
-            console.log(e)
-            setPilihKursi(e)
+        
+        const handlePilihKursi = (id) => {
+            console.log(id)
+            setPilihKursi(id)
         }
         return (
             <>
                 <Panel shaded style={{background: '#fff', marginTop: '20px'}}>
                     <span>Pilih Kursi</span>
                     <Grid style={{ width: '100%', marginTop: '20px', marginBottom: '20px'}}>
-                        <div>{rows}</div>
+                        <CheckboxGroup value={pilihKursi} onChange={handlePilihKursi}>
+                            <div>{rows}</div>
+                        </CheckboxGroup>
                     </Grid>
                     <ButtonToolbar>
                         <Button onClick={onPrevious} disabled={step === 0}>
@@ -162,10 +164,10 @@ function Menu() {
         return(
             <Panel shaded style={{background: '#fff', marginTop: '20px'}}>
                 <span>Pilih Metode Pembayaran : </span>
-                <RadioTileGroup aria-label="Visibility Level" style={{ marginTop: '20px'}}>
+                <RadioTileGroup aria-label="Visibility Level" style={{ marginTop: '20px'}} value={pilihPembayaran} onChange={(e) => handlePilihPembayaran(e)}>
                     {apiPembayaran.map(item => (
                         <>
-                        <RadioTile label={item.name} value={item.id} onChange={(e) => handlePilihPembayaran(e)}>
+                        <RadioTile label={item.name} value={item.id}>
                             <img src={item.image} style={{ width: '80px'}} alt={item.name}/>
                         </RadioTile>
                         </>
@@ -192,18 +194,23 @@ function Menu() {
     };
     
     const onSubmit = () => {
+        let dataFormSubmit = {}
         if (kotaTujuan !== '' && kotaAwal !== '' && pergi !== '' && pilihKursi !== '' && pilihPembayaran !== ''){
-            setDataForm({
+            dataFormSubmit = {
                 kota_awal : kotaAwal,
                 kota_tujuan : kotaTujuan,
                 pergi: pergi,
                 pulang: pulang,
                 kursi: pilihKursi,
                 pembayaran: pilihPembayaran
-            })
+
+            }
         }
 
-        if (Object.values(dataForm).length === 0) {
+        console.log(kotaTujuan +' - ' + kotaAwal +' - '+ pergi +' - ' + pilihKursi + ' - ' + pilihPembayaran)
+        console.log(dataFormSubmit)
+
+        if (Object.values(dataFormSubmit).length === 0) {
             Swal.fire({
                 title: 'Error!',
                 text: 'Form tidak boleh kosong sahabat!',
@@ -223,7 +230,7 @@ function Menu() {
                 allowEscapeKey: false
             })
         }
-        console.log(dataForm);
+        console.log(dataFormSubmit);
     }
 
     return(
