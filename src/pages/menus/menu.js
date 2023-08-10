@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import SideNavMenu from '../component/sideNavMenu';
 import NavbarMenu from '../component/navbarMenu';
 import image from '../../assets/images/default.jpg'
-import { Container, Panel, Steps, Checkbox, CheckboxGroup, Form, Button, Rate, SelectPicker, DatePicker, ButtonToolbar, Grid, Row, Col, Toggle, RadioTileGroup, RadioTile } from 'rsuite';
+import { Container, Panel, Steps, Checkbox, CheckboxGroup, Form, Button, Rate, SelectPicker, DatePicker, ButtonToolbar, Grid, Row, Col, Toggle, RadioTileGroup, RadioTile, Modal, Placeholder } from 'rsuite';
 import SearchIcon from '@rsuite/icons/Search';
 import Swal from 'sweetalert2'
 
@@ -15,14 +15,15 @@ function Menu() {
     const [kotaAwal, setKotaAwal] = useState('');
     const [kotaTujuan, setKotaTujuan] = useState('');
     const [pergi, setPergi] = useState();
-    const [pulang, setPulang] = useState();
+    const [pulang, setPulang] = useState(0);
     const [step, setStep] = useState(0);
     const [dataForm, setDataForm] = useState({});
     const [pP, setPP] = useState(false);
     const [DataKursi, setDataKursi] = useState();
     const [pilihKursi, setPilihKursi] = useState([]);
     const [pilihPembayaran, setPembayaran] = useState('');
-    const [hoverValue, setHoverValue] = React.useState(3);
+    const [hoverValue, setHoverValue] = useState(3);
+    const [open, setOpen] = useState(false);
     let url = 'http://localhost:8080/pd/v1';
 
     useEffect(() => {
@@ -65,6 +66,69 @@ function Menu() {
         getKursi()
     }, [])
 
+    const handleOpen = () => {
+        var berangkat = new Date(pergi);
+        var epoch = new Date(0);
+        var format = berangkat - epoch;
+        var timestampEpochDetik = Math.floor(format / 1000);
+        console.log(timestampEpochDetik)
+        let data = {
+            asal : kotaAwal,
+            tujuan: kotaTujuan,
+            tgl_berangkat: timestampEpochDetik,
+            tgl_pulang : pulang,
+        }
+        const getBus = async () => {
+            try {
+                const response = await fetch(url + '/getBus', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data),
+                })
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                const result = await response.json();
+                
+                if (response.ok) {
+                    setOpen(true)
+                    Swal.fire({
+                        title: "error",
+                        text: 'Backendnya lagi mager',
+                        icon: 'success',
+                        confirmButtonText: 'Oke',
+                        allowOutsideClick: false,
+                        allowEscapeKey: false
+                    })
+                } else {
+                    setOpen(false)
+                    Swal.fire({
+                        title: "errpr",
+                        text: 'Backendnya lagi belajar',
+                        icon: 'error',
+                        confirmButtonText: 'Oke',
+                        allowOutsideClick: false,
+                        allowEscapeKey: false
+                    })
+                }
+            } catch(error) {
+                setOpen(false)
+                Swal.fire({
+                    title: error,
+                    text: 'Backendnya masih error, lagi belajar make golang dia',
+                    icon: 'info',
+                    confirmButtonText: 'Oke',
+                    allowOutsideClick: false,
+                    allowEscapeKey: false
+                })
+            }
+        }
+        getBus()
+    };
+    const handleClose = () => setOpen(false);
+
     const onChange = nextStep => {
         if (Object.values(dataForm).length !== 0) {
             setStep(nextStep < 0 ? 0 : nextStep > 3 ? 3 : nextStep);
@@ -84,11 +148,12 @@ function Menu() {
                 allowEscapeKey: false
             })
         }
+        setOpen(false);
     };
     const onPrevious = () => setStep(step - 1);
 
     // API KOTA
-    const kota = ['kota1', 'kota2', 'kota3', 'kota4'].map(item => ({
+    const kota = ['Tangerang', 'Purworejo', 'Jakarta', 'Semarang'].map(item => ({
         label: item,
         value: item
     }));
@@ -293,7 +358,7 @@ function Menu() {
                                     </Grid>
                                     <Form.Group style={{ marginTop: '20px'}}>
                                         <ButtonToolbar>
-                                            {step === 0 ? (<Button appearance="primary" color="violet" onClick={onNext}>
+                                            {step === 0 ? (<Button appearance="primary" color="violet" onClick={handleOpen}>
                                                 <span><SearchIcon /> Cari</span>
                                             </Button>) : (
                                                 <Button onClick={onPrevious} disabled={step === 0}>
@@ -330,6 +395,24 @@ function Menu() {
                     </Row>
                 </Grid>
             </Container>
+
+            {/* MODAL */}
+            <Modal overflow={true} open={open} onClose={handleClose}>
+                <Modal.Header>
+                <Modal.Title>Modal Title</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                <Placeholder.Paragraph rows={80} />
+                </Modal.Body>
+                <Modal.Footer>
+                <Button onClick={onNext} appearance="primary">
+                    Ok
+                </Button>
+                <Button onClick={handleClose} appearance="subtle">
+                    Cancel
+                </Button>
+                </Modal.Footer>
+            </Modal>
         </>
     )
 }
