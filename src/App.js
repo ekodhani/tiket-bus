@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Container } from 'rsuite';
 import 'rsuite/dist/rsuite-no-reset.min.css';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
@@ -10,20 +10,21 @@ import BelumBayar from './pages/menus/belumbayar.js';
 import RiwayatTransaksi from './pages/menus/riwayattransaksi.js';
 
 function App() {
+  const[darkMode, setDarkMode] = useState(false)
   
   // NAVIGASI
   const NavigationBar = () => {
     return (
       <Router>
         <Routes>
-          <Route path="/" element={<Home />}/>
-          <Route path="/signup" element={<SignUp />} />
-          <Route path="/signin" element={<SignIn />} />
-          <Route path="/menu" element={<Menu />} />
-          <Route path="/belumbayar" element={<BelumBayar />} />
-          <Route path="/riwayattransaksi" element={<RiwayatTransaksi />} />
-          <Route path="/rekomendasi" element={<Menu />} />
-          <Route path="/logout" element={<Home />} />
+          <Route path="/" element={<Home darkMode={darkMode} setdarkmode={(e) => setDarkMode(e)} />}/>
+          <Route path="/signup" element={<SignUp darkMode={darkMode} setdarkmode={(e) => setDarkMode(e)}/>} />
+          <Route path="/signin" element={<SignIn darkMode={darkMode} setdarkmode={(e) => setDarkMode(e)}/>} />
+          <Route path="/menu" element={<Menu darkMode={darkMode} setdarkmode={(e) => setDarkMode(e)}/>} />
+          <Route path="/belumbayar" element={<BelumBayar darkMode={darkMode} setdarkmode={(e) => setDarkMode(e)}/>} />
+          <Route path="/riwayattransaksi" element={<RiwayatTransaksi darkMode={darkMode} setdarkmode={(e) => setDarkMode(e)}/>} />
+          <Route path="/rekomendasi" element={<Menu darkMode={darkMode} setdarkmode={(e) => setDarkMode(e)}/>} />
+          <Route path="/logout" element={<Home darkMode={darkMode} setdarkmode={(e) => setDarkMode(e)}/>} />
         </Routes>
       </Router>
     )

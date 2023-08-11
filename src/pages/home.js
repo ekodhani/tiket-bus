@@ -11,7 +11,7 @@ import Girasol from '../assets/images/partner/girasol.jpg';
 import ADR from '../assets/images/partner/akudanrumah.jpg';
 import Navbars from './component/navbar';
 
-function Home() {
+function Home(props) {
     const [dari, setDariMana] = useState('');
     const [ke, setKemana] = useState('');
     const [rangeDate, setRangeDate] = useState([]);
@@ -42,17 +42,17 @@ function Home() {
           ];
         return(
         <>
-            <h2 style={{ textAlign: 'center'}}>Testimonial</h2>
+            <h2 style={{ textAlign: 'center', color : props.darkMode ? '#aeaeae' : '' }}>Testimonial</h2>
             <FlexboxGrid justify="center">
             {testimonials.map((testimonial, index) => (
                 <FlexboxGrid.Item key={index} colspan={6} style={{ padding: '20px' }}>
                 <Panel bordered>
                     <div style={{ textAlign: 'center' }}>
                     <Avatar src={testimonial.avatarUrl} size="lg" circle />
-                    <h4 style={{ margin: '10px 0 5px' }}>{testimonial.name}</h4>
-                    <p style={{ margin: '0', color: 'grey' }}>{testimonial.job}</p>
+                    <h4 style={{ margin: '10px 0 5px',  color : props.darkMode ? '#aeaeae' : '' }}>{testimonial.name}</h4>
+                    <p style={{ margin: '0',  color : props.darkMode ? '#aeaeae' : '' }}>{testimonial.job}</p>
                     </div>
-                    <p>{testimonial.text}</p>
+                    <p style={{  color : props.darkMode ? '#aeaeae' : '' }}>{testimonial.text}</p>
                 </Panel>
                 </FlexboxGrid.Item>
             ))}
@@ -74,8 +74,8 @@ function Home() {
     const Partner = () => {
         return(
             <>
-                <Content style={{ padding: '30px'}}>
-                    <h2 style={{ textAlign: 'center', marginBottom: '30px'}}>Partner</h2>
+                <Content style={{ padding: '30px', background: props.darkMode ? '#121212' : ''}}>
+                    <h2 style={{ textAlign: 'center', marginBottom: '30px',  color : props.darkMode ? '#aeaeae' : '' }}>Partner</h2>
                     <FlexboxGrid justify="center">
                         <FlexboxGrid.Item colspan={24} md={6} as={Col}>
                             <Panel shaded className='centered-panel'>
@@ -167,47 +167,47 @@ function Home() {
 
     return (
         <>
-            <Navbars />
-            <Content style={{ padding: '30px'}} className="top-section">
+            <Navbars darkmode={props.darkMode} setdarkmode={(e) => props.setdarkmode(e)}/>
+            <Content style={{ padding: '30px', background: props.darkMode ? '#171717' : ''}} className="top-section">
                 <Row className="show-grid center-image">
                     <Col xs={12}>
-                        <h1 style={{ color: '#333333'}}>Jelajahi Destinasi Impian Anda dengan Tiket Bus Kami</h1>
+                        <h1 style={{ color: props.darkMode ? '#aeaeae' : '#333333'}}>Jelajahi Destinasi Impian Anda dengan Tiket Bus Kami</h1>
                     </Col>
                     <Col xs={12}>
                         <Panel shaded style={{ height: 500 }} className='bg' />
                     </Col>
                 </Row>
             </Content>
-            <Content style={{ padding: '30px', background: '#f5f5f5'}}>
+            <Content style={{ padding: '30px', background: props.darkMode ? '#171717' : '#f5f5f5'}}>
                 <Row>
                     <Col xs={24} sm={12} md={8}>
-                        <Panel shaded className="custom-panel">
+                        <Panel shaded className="custom-panel" style={{ background: props.darkMode ? '#2B2B2B' : '' }}>
                             <img src={destinasiOne} alt="destinasi1"/>
-                            <h3 style={{ color: '#333333'}}>Destinasi A</h3>
-                            <p style={{ color: '#424242'}}>Explore the breathtaking beauty of Destinasi A on our luxury buses.</p>
+                            <h3 style={{ color: props.darkMode ? '#aeaeae' : '#333333'}}>Destinasi A</h3>
+                            <p style={{ color: props.darkMode ? '#aeaeae' : '#424242'}}>Explore the breathtaking beauty of Destinasi A on our luxury buses.</p>
                         </Panel>
                     </Col>
                     <Col xs={24} sm={12} md={8}>
-                        <Panel shaded className="custom-panel">
+                        <Panel shaded className="custom-panel" style={{ background: props.darkMode ? '#2B2B2B' : '' }}>
                             <img src={destinasiTwo} alt="destinasi2"/>
-                            <h3 style={{ color: '#333333'}}>Destinasi B</h3>
-                            <p style={{ color: '#424242'}}>Experience the thrill of adventure in Destinasi B with our comfortable rides.</p>
+                            <h3 style={{ color: props.darkMode ? '#aeaeae' : '#333333'}}>Destinasi B</h3>
+                            <p style={{ color: props.darkMode ? '#aeaeae' : '#424242'}}>Experience the thrill of adventure in Destinasi B with our comfortable rides.</p>
                         </Panel>
                     </Col>
                     <Col xs={24} sm={12} md={8}>
-                        <Panel shaded className="custom-panel">
+                        <Panel shaded className="custom-panel" style={{ background: props.darkMode ? '#2B2B2B' : '' }}>
                             <img src={destinasiThree} alt="destinasi3"/>
-                            <h3 style={{ color: '#333333'}}>Destinasi C</h3>
-                            <p style={{ color: '#424242'}}>Discover the rich culture and history of Destinasi C in style and safety.</p>
+                            <h3 style={{ color: props.darkMode ? '#aeaeae' : '#333333'}}>Destinasi C</h3>
+                            <p style={{ color: props.darkMode ? '#aeaeae' : '#424242'}}>Discover the rich culture and history of Destinasi C in style and safety.</p>
                         </Panel>
                     </Col>
                 </Row>
             </Content>
-            <Content style={{ padding: '30px', background: '#f5f5f5'}}>
+            <Content style={{ padding: '30px', background: props.darkMode ? '#171717' : '#f5f5f5'}}>
                 <FlexboxGrid justify="center" style={{ paddingTop: '50px' }}>
                     <FlexboxGrid.Item colspan={12}>
-                        <Panel shaded style={{background: '#fff'}}>
-                            <h3 style={{ color: '#424242'}}>Mau Kemana ?</h3>
+                        <Panel shaded style={{ background: props.darkMode ? '#2B2B2B' : '#fff'}}>
+                            <h3 style={{ color: props.darkMode ? '#aeaeae' : '#424242'}}>Mau Kemana ?</h3>
                             <Form fluid style={{ marginBottom: '20px'}} onSubmit={handleSubmit}>
                                 <Row>
                                     <Col xs={8}>
@@ -245,13 +245,13 @@ function Home() {
                     </FlexboxGrid.Item>
                 </FlexboxGrid>
             </Content>
-            <Content style={{ padding: '30px'}}>
+            <Content style={{ padding: '30px', background: props.darkMode ? '#171717' : ''}}>
                 <Testimonial />
             </Content>
             <Promo />
             <Partner />
             <CallToAction />
-            <Content style={{ marginLeft: 'auto', padding: '10px', textAlign: 'right'}}>
+            <Content style={{ padding: '10px', textAlign: 'right', background: props.darkMode ? '#121212' : ''}}>
                 <small style={{ color: '#666666'}}>Copyright &copy;</small><br />
                 <small style={{ color: '#666666'}}>Allright Reserved</small>
             </Content>
