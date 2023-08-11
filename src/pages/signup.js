@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import Swal from 'sweetalert2'
 import Navbars from './component/navbar';
 
-function SignUp() {
+function SignUp(props) {
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
     const [noTelp, setNoTelp] = useState('');
@@ -114,12 +114,12 @@ function SignUp() {
 
     return (
     <>
-    <Navbars />
-    <Grid fluid>
+    <Navbars darkmode={props.darkMode} setdarkmode={(e) => props.setdarkmode(e)}/>
+    <Grid fluid style={{ background: props.darkMode ? '#171717' : ''}}>
         <Row className="show-grid">
             <Col xs={12}>
             <Content style={{ padding: '30px'}}>
-                <Panel bordered shaded style={{ display: 'inline-block', width: 500, paddingRight: '30px', paddingLeft: '30px', paddingTop: '10px', paddingBottom: '10px', background: '#fff' }}>
+                <Panel bordered shaded style={{ display: 'inline-block', width: 500, paddingRight: '30px', paddingLeft: '30px', paddingTop: '10px', paddingBottom: '10px', background: props.darkMode ?  '#171717' : '#fff' }}>
                 <h1 style={{ textAlign: 'center' }}>Sign Up</h1>
                     <Form fluid onSubmit={handleSubmit} style={{ marginBottom: '20px'}}>
                         <Form.Group controlId="name">

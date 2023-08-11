@@ -3,7 +3,7 @@ import { Content, Panel, Form, Button, ButtonToolbar, Grid, Row, Col, Loader} fr
 import Swal from 'sweetalert2'
 import Navbars from './component/navbar';
 
-function SignIn() {
+function SignIn(props) {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [loading, setLoading] = useState(false);
@@ -83,7 +83,7 @@ function SignIn() {
 
     return (
     <>
-    <Navbars />
+    <Navbars darkmode={props.darkMode} setdarkmode={(e) => props.setdarkmode(e)} />
     <Grid fluid>
         <Row className="show-grid">
             <Col xs={12}>
