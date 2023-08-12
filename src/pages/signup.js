@@ -120,22 +120,22 @@ function SignUp(props) {
             <Col xs={12}>
             <Content style={{ padding: '30px'}}>
                 <Panel bordered shaded style={{ display: 'inline-block', width: 500, paddingRight: '30px', paddingLeft: '30px', paddingTop: '10px', paddingBottom: '10px', background: props.darkMode ?  '#171717' : '#fff' }}>
-                <h1 style={{ textAlign: 'center' }}>Sign Up</h1>
+                <h1 style={{ textAlign: 'center', color : props.darkMode ? '#fff' : '#171717' }}>Sign Up</h1>
                     <Form fluid onSubmit={handleSubmit} style={{ marginBottom: '20px'}}>
                         <Form.Group controlId="name">
-                            <Form.Control name="name" placeholder='Username' value={username} onChange={(e) => setUsername(e)}/>
+                            <Form.Control name="name" placeholder='Username' value={username} onChange={(e) => setUsername(e)} style={{background: props.darkMode ?  '#171717' : ''}}/>
                         </Form.Group>
                         <Form.Group controlId="no_telp">
-                            <Form.Control name="no_telp" type="text" placeholder="Phone" value={noTelp} onChange={(e) => setNoTelp(e)}/>
+                            <Form.Control name="no_telp" type="text" placeholder="Phone" value={noTelp} onChange={(e) => setNoTelp(e)} style={{background: props.darkMode ?  '#171717' : ''}}/>
                         </Form.Group>
                         <Form.Group controlId="email">
-                            <Form.Control name="email" type="email" placeholder="email" value={email} onChange={(e) => setEmail(e)}/>
+                            <Form.Control name="email" type="email" placeholder="email" value={email} onChange={(e) => setEmail(e)} style={{background: props.darkMode ?  '#171717' : ''}}/>
                         </Form.Group>
                         <Form.Group controlId="password">
-                            <Form.Control name="password" type="password" autoComplete="off" value={password} placeholder="Password" onChange={(e) => setPassword(e)}/>
+                            <Form.Control name="password" type="password" autoComplete="off" value={password} placeholder="Password" onChange={(e) => setPassword(e)} style={{background: props.darkMode ?  '#171717' : ''}}/>
                         </Form.Group>
                         <Form.Group controlId="confirm-password">
-                            <Form.Control name="confirm_password" type="password" autoComplete="off" value={confirmPassword} placeholder="Confirm Password" onChange={(e) => setConfirmPassword(e)}/>
+                            <Form.Control name="confirm_password" type="password" autoComplete="off" value={confirmPassword} placeholder="Confirm Password" onChange={(e) => setConfirmPassword(e)} style={{background: props.darkMode ?  '#171717' : ''}}/>
                         </Form.Group>
                         <Form.Group>
                             <ButtonToolbar>
@@ -145,7 +145,7 @@ function SignUp(props) {
                             </ButtonToolbar>
                         </Form.Group>
                     </Form>
-                    <span>Already have an account ? <Link to="/signin">Sign In</Link></span>
+                    <span style={{ color : props.darkMode ? '#fff' : '#171717' }}>Already have an account ? <Link to="/signin">Sign In</Link></span>
                 </Panel>
             </Content>
             </Col>

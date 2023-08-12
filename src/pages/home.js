@@ -4,6 +4,7 @@ import '../assets/css/home.css';
 import destinasiOne from '../assets/images/destinasi1.jpeg';
 import destinasiTwo from '../assets/images/destinasi2.jpeg';
 import destinasiThree from '../assets/images/destinasi3.jpg';
+import { Link } from 'react-router-dom';
 import SearchIcon from '@rsuite/icons/Search';
 import Swal from 'sweetalert2'
 import Nexide from '../assets/images/partner/nexide.jpg';
@@ -172,6 +173,11 @@ function Home(props) {
                 <Row className="show-grid center-image">
                     <Col xs={12}>
                         <h1 style={{ color: props.darkMode ? '#aeaeae' : '#333333'}}>Jelajahi Destinasi Impian Anda dengan Tiket Bus Kami</h1>
+                        <Link to="/signin">
+                            <Button appearance="primary" color="violet" type="submit">
+                                <span>Sign In</span>
+                            </Button>
+                        </Link>
                     </Col>
                     <Col xs={12}>
                         <Panel shaded style={{ height: 500 }} className='bg' />
@@ -212,17 +218,17 @@ function Home(props) {
                                 <Row>
                                     <Col xs={8}>
                                         <Form.Group controlId="dari">
-                                            <SelectPicker name="dari" data={kota} placeholder="Dari mana" block value={dari} onChange={(e) => setDariMana(e)}/>
+                                            <SelectPicker name="dari" style={{ background : props.darkMode ? '#4e4e4e' : ''}} data={kota} placeholder="Dari mana" block value={dari} onChange={(e) => setDariMana(e)}/>
                                         </Form.Group>
                                     </Col>
                                     <Col xs={8}>
                                         <Form.Group controlId="ke">
-                                            <SelectPicker name="ke" data={kota} placeholder="Ke mana" block value={ke} onChange={(e) => setKemana(e)}/>
+                                            <SelectPicker name="ke" data={kota} style={{ background : props.darkMode ? '#4e4e4e' : ''}} placeholder="Ke mana" block value={ke} onChange={(e) => setKemana(e)}/>
                                         </Form.Group>
                                     </Col>
                                     <Col xs={8}>
                                         <Form.Group controlId="range">
-                                            <DateRangePicker placeholder="Rentang Waktu" name="range" block value={rangeDate} onChange={(e) => setRangeDate(e)} />
+                                            <DateRangePicker placeholder="Rentang Waktu" style={{ background : props.darkMode ? '#4e4e4e' : ''}} name="range" block value={rangeDate} onChange={(e) => setRangeDate(e)} />
                                         </Form.Group>
                                     </Col>
                                 </Row>

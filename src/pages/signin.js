@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import { Content, Panel, Form, Button, ButtonToolbar, Grid, Row, Col, Loader} from 'rsuite';
 import Swal from 'sweetalert2'
+import { Link } from 'react-router-dom';
 import Navbars from './component/navbar';
 
 function SignIn(props) {
@@ -88,14 +89,14 @@ function SignIn(props) {
         <Row className="show-grid">
             <Col xs={12}>
             <Content style={{ padding: '30px'}}>
-                <Panel bordered shaded style={{ display: 'inline-block', width: 500, paddingRight: '30px', paddingLeft: '30px', paddingTop: '10px', paddingBottom: '10px', background: '#fff' }}>
-                <h1 style={{ textAlign: 'center' }}>Sign In</h1>
+                <Panel bordered shaded style={{ display: 'inline-block', width: 500, paddingRight: '30px', paddingLeft: '30px', paddingTop: '10px', paddingBottom: '10px', background: props.darkMode ?  '#171717' : '#fff' }}>
+                <h1 style={{ textAlign: 'center', color: props.darkMode ? '#aeaeae' : '#171717' }}>Sign In</h1>
                     <Form fluid onSubmit={handleSubmit} style={{ marginBottom: '20px'}}>
                         <Form.Group controlId="name">
-                            <Form.Control name="name" placeholder='Username' value={username} onChange={(e) => setUsername(e)}/>
+                            <Form.Control name="name" placeholder='Username' value={username} onChange={(e) => setUsername(e)} style={{background: props.darkMode ?  '#171717' : ''}}/>
                         </Form.Group>
                         <Form.Group controlId="password">
-                            <Form.Control name="password" type="password" autoComplete="off" placeholder="Password" value={password} onChange={(e) => setPassword(e)}/>
+                            <Form.Control name="password" type="password" autoComplete="off" placeholder="Password" value={password} onChange={(e) => setPassword(e)} style={{background: props.darkMode ?  '#171717' : ''}}/>
                         </Form.Group>
                         <Form.Group>
                         <ButtonToolbar>
@@ -105,7 +106,7 @@ function SignIn(props) {
                             </ButtonToolbar>
                         </Form.Group>
                     </Form>
-                    <span>Don't have an account ? <a href="/signup">Sign Up</a></span>
+                    <span style={{ color: props.darkMode ? '#aeaeae' : '#171717' }}>Don't have an account ? <Link to="/signup">Sign Up</Link></span>
                 </Panel>
             </Content>
             </Col>

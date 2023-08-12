@@ -32,7 +32,7 @@ function App() {
 
   return (
     <>
-      <Container>
+      <Container style={{ background : darkMode ? '#171717' : '', height: '100vh'}}>
         <NavigationBar />
       </Container>
     </>
