@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import { Content, Panel, Form, Button, ButtonToolbar, Grid, Row, Col, Loader} from 'rsuite';
 import Swal from 'sweetalert2'
-import { Link } from 'react-router-dom';
+import { Link, Navigate } from 'react-router-dom';
 import Navbars from './component/navbar';
 
 function SignIn(props) {
@@ -44,10 +44,10 @@ function SignIn(props) {
 
                 if (response.ok) {
                     setLoading(false)
-                    window.location.href = '/menu';
+                    props.setIsLogin(true);
+                    // window.location.href = '/menu';
                     // Simpan data ke session
                     sessionStorage.setItem('userData', JSON.stringify(result));
-                    console.log(sessionStorage.getItem('userData'))
                 } else {
                     Swal.fire({
                         title: result.message,
@@ -79,36 +79,40 @@ function SignIn(props) {
     }
 
     return (
-    <>
-    <Navbars darkmode={props.darkMode} setdarkmode={(e) => props.setdarkmode(e)} />
-    <Grid fluid>
-        <Row className="show-grid">
-            <Col xs={12}>
-            <Content style={{ padding: '30px'}}>
-                <Panel bordered shaded style={{ display: 'inline-block', width: 500, paddingRight: '30px', paddingLeft: '30px', paddingTop: '10px', paddingBottom: '10px', background: props.darkMode ?  '#171717' : '#fff' }}>
-                <h1 style={{ textAlign: 'center', color: props.darkMode ? '#aeaeae' : '#171717' }}>Sign In</h1>
-                    <Form fluid onSubmit={handleSubmit} style={{ marginBottom: '20px'}}>
-                        <Form.Group controlId="name">
-                            <Form.Control name="name" placeholder='Username' value={username} onChange={(e) => setUsername(e)} style={{background: props.darkMode ?  '#171717' : ''}}/>
-                        </Form.Group>
-                        <Form.Group controlId="password">
-                            <Form.Control name="password" type="password" autoComplete="off" placeholder="Password" value={password} onChange={(e) => setPassword(e)} style={{background: props.darkMode ?  '#171717' : ''}}/>
-                        </Form.Group>
-                        <Form.Group>
-                        <ButtonToolbar>
-                                <Button appearance="primary" color="violet" type="submit" disabled={loading ? true : false}>
-                                    {loading ? (<Loader content="Loading..."/>) : 'Sign In'}
-                                </Button>
-                            </ButtonToolbar>
-                        </Form.Group>
-                    </Form>
-                    <span style={{ color: props.darkMode ? '#aeaeae' : '#171717' }}>Don't have an account ? <Link to="/signup">Sign Up</Link></span>
-                </Panel>
-            </Content>
-            </Col>
-        </Row>
-    </Grid>
-    </>
+    props.IsLogin === true ? (
+        <Navigate to="/menu" />
+    ) : (
+        <>
+        <Navbars darkmode={props.darkMode} setdarkmode={(e) => props.setdarkmode(e)} />
+        <Grid fluid>
+            <Row className="show-grid">
+                <Col xs={12}>
+                <Content style={{ padding: '30px'}}>
+                    <Panel bordered shaded style={{ display: 'inline-block', width: 500, paddingRight: '30px', paddingLeft: '30px', paddingTop: '10px', paddingBottom: '10px', background: props.darkMode ?  '#171717' : '#fff' }}>
+                    <h1 style={{ textAlign: 'center', color: props.darkMode ? '#aeaeae' : '#171717' }}>Sign In</h1>
+                        <Form fluid onSubmit={handleSubmit} style={{ marginBottom: '20px'}}>
+                            <Form.Group controlId="name">
+                                <Form.Control name="name" placeholder='Username' value={username} onChange={(e) => setUsername(e)} style={{background: props.darkMode ?  '#171717' : ''}}/>
+                            </Form.Group>
+                            <Form.Group controlId="password">
+                                <Form.Control name="password" type="password" autoComplete="off" placeholder="Password" value={password} onChange={(e) => setPassword(e)} style={{background: props.darkMode ?  '#171717' : ''}}/>
+                            </Form.Group>
+                            <Form.Group>
+                            <ButtonToolbar>
+                                    <Button appearance="primary" color="violet" type="submit" disabled={loading ? true : false}>
+                                        {loading ? (<Loader content="Loading..."/>) : 'Sign In'}
+                                    </Button>
+                                </ButtonToolbar>
+                            </Form.Group>
+                        </Form>
+                        <span style={{ color: props.darkMode ? '#aeaeae' : '#171717' }}>Don't have an account ? <Link to="/signup">Sign Up</Link></span>
+                    </Panel>
+                </Content>
+                </Col>
+            </Row>
+        </Grid>
+        </>
+    )
     );
 }
 

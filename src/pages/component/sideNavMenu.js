@@ -12,7 +12,7 @@ function SideNavMenu (props) {
     return(
         <>
         <div style={{width: 240}}>
-            <Sidenav expanded={props.exp} defaultOpenKeys={['3', '4']}>
+            <Sidenav expanded={props.exp} defaultOpenKeys={['3', '4']} appearance={props.darkMode ? 'subtle' : ''}>
                 <Sidenav.Body>
                     <Nav activeKey={props.active} onSelect={props.setActive}>
                         <Nav.Item eventKey="1" icon={<DashboardIcon />} href="/menu">

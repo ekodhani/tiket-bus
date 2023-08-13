@@ -5,8 +5,9 @@ import image from '../../assets/images/default.jpg'
 import { Container, Panel, Steps, Checkbox, CheckboxGroup, Form, Button, Rate, SelectPicker, DatePicker, ButtonToolbar, Grid, Row, Col, Toggle, RadioTileGroup, RadioTile, Modal, Placeholder } from 'rsuite';
 import SearchIcon from '@rsuite/icons/Search';
 import Swal from 'sweetalert2'
+import { Navigate, Link } from 'react-router-dom'
 
-function Menu() {
+function Menu(props) {
     const user = JSON.parse(sessionStorage.getItem('userData'))
     let nama = user[0].nama
     let img = user[0].image
@@ -299,13 +300,16 @@ function Menu() {
     }
 
     return(
+        !props.IsLogin === true ? (
+            <Navigate to="/" />
+        ) : (
         <>
             <Container fluid>
-                <NavbarMenu username={nama} images={`${image}`} exp={expanded} setExp={(e) => setExpanded(e)}/>
+                <NavbarMenu username={nama} images={`${image}`} exp={expanded} setExp={(e) => setExpanded(e)} setDarkMode={(e) => props.setdarkmode(e)} darkMode={props.darkMode} IsLogin={props.IsLogin} setIsLogin={(e) => props.setIsLogin(e)}/>
                 <Grid style={{ width: '100%'}}>
                     <Row>
                         <Col lg={expanded ? 5 : 2} xs={expanded ? 5 : 5}>
-                            <SideNavMenu username={nama} images={`${image}`} exp={expanded} setExp={(e) => setExpanded(e)} active={activeKey} setActive={(e) => setActiveKey(e)}/>
+                            <SideNavMenu username={nama} images={`${image}`} exp={expanded} setExp={(e) => setExpanded(e)} active={activeKey} setActive={(e) => setActiveKey(e)} setDarkMode={(e) => props.setdarkmode(e)} darkMode={props.darkMode}/>
                         </Col>
                         <Col lg={expanded ? 18 : 21} xs={expanded ? 5: 5} style={{ marginTop: '20px'}}>
                             <Steps current={step}>
@@ -414,6 +418,7 @@ function Menu() {
                 </Modal.Footer>
             </Modal>
         </>
+        )
     )
 }
 
