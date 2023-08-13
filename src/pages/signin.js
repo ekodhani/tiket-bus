@@ -39,9 +39,6 @@ function SignIn(props) {
                     },
                     body: JSON.stringify(dataForm),
                 })
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
                 const result = await response.json();
                 console.log(result);
 
@@ -53,8 +50,7 @@ function SignIn(props) {
                     console.log(sessionStorage.getItem('userData'))
                 } else {
                     Swal.fire({
-                        title: result,
-                        text: 'Backendnya masih ngopi dulu, tunggu ya, lagi mikirin caranya nyiapin endpoint',
+                        title: result.message,
                         icon: 'info',
                         confirmButtonText: 'Oke',
                         allowOutsideClick: false,
