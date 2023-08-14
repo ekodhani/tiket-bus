@@ -11,6 +11,7 @@ import Nexide from '../assets/images/partner/nexide.jpg';
 import Girasol from '../assets/images/partner/girasol.jpg';
 import ADR from '../assets/images/partner/akudanrumah.jpg';
 import Navbars from './component/navbar';
+import DefaultImg from '../assets/images/default.jpg'
 
 function Home(props) {
     const [dari, setDariMana] = useState('');
@@ -22,10 +23,10 @@ function Home(props) {
     const Testimonial = () => { 
         const testimonials = [
             {
-              name: 'Mentari',
+              name: 'User',
               job: 'Lawyer',
               text: 'FLW Travel, keren bisa membuat impianku menjadi nyata',
-              avatarUrl: 'https://mentari.netlify.app/images/ayang.JPG',
+              avatarUrl: DefaultImg,
             },
             {
                 name: 'John Doe',
