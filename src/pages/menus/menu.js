@@ -2,10 +2,12 @@ import React, { useEffect, useState } from "react";
 import SideNavMenu from '../component/sideNavMenu';
 import NavbarMenu from '../component/navbarMenu';
 import image from '../../assets/images/default.jpg'
-import { Container, Panel, Steps, Checkbox, CheckboxGroup, Form, Button, Rate, SelectPicker, DatePicker, ButtonToolbar, Grid, Row, Col, Toggle, RadioTileGroup, RadioTile, Modal, Placeholder } from 'rsuite';
+import { Container, Panel, Steps, Checkbox, CheckboxGroup, Form, Button, Rate, SelectPicker, DatePicker, ButtonToolbar, Grid, Row, Col, Toggle, RadioTileGroup, RadioTile, Modal, Badge, FlexboxGrid } from 'rsuite';
 import SearchIcon from '@rsuite/icons/Search';
 import Swal from 'sweetalert2'
 import { Navigate, Link } from 'react-router-dom'
+import FlexboxGridItem from "rsuite/esm/FlexboxGrid/FlexboxGridItem";
+
 
 function Menu(props) {
     const user = JSON.parse(sessionStorage.getItem('userData'))
@@ -21,6 +23,7 @@ function Menu(props) {
     const [dataForm, setDataForm] = useState({});
     const [pP, setPP] = useState(false);
     const [DataKursi, setDataKursi] = useState();
+    const [DataBus, setDataBus] = useState([]);
     const [pilihKursi, setPilihKursi] = useState([]);
     const [pilihPembayaran, setPembayaran] = useState('');
     const [hoverValue, setHoverValue] = useState(3);
@@ -92,21 +95,14 @@ function Menu(props) {
                     throw new Error('Network response was not ok');
                 }
                 const result = await response.json();
+                setDataBus(result)
                 
                 if (response.ok) {
                     setOpen(true)
-                    Swal.fire({
-                        title: "error",
-                        text: 'Backendnya lagi mager',
-                        icon: 'success',
-                        confirmButtonText: 'Oke',
-                        allowOutsideClick: false,
-                        allowEscapeKey: false
-                    })
                 } else {
                     setOpen(false)
                     Swal.fire({
-                        title: "errpr",
+                        title: "error",
                         text: 'Backendnya lagi belajar',
                         icon: 'error',
                         confirmButtonText: 'Oke',
@@ -221,6 +217,16 @@ function Menu(props) {
             'name' : 'Ovo'
         },
     ]
+
+    const formatedPrice = (price) => {
+        console.log(price)
+        const formattedAmount = new Intl.NumberFormat('id-ID', {
+            style: 'currency',
+            currency: 'IDR'
+          }).format(price);
+
+          return formattedAmount
+    }
     
     const Pembayaran = () => {
         const handlePilihPembayaran = (e) => {
@@ -320,7 +326,7 @@ function Menu(props) {
                             </Steps>
                             <Form style={{ marginBottom: '20px'}} onSubmit={onSubmit}>
                             {step === 0 && ( // Pilih Tujuan
-                                <Panel shaded style={{background: '#fff', marginTop: '20px'}}>
+                                <Panel shaded style={{background: props.darkMode ? '#2B2B2B' : '#fff', marginTop: '20px'}}>
                                     <Grid style={{ width: '100%', marginBottom: '30px'}}>
                                         <Row gutter={24}>
                                             <Col xs={24} sm={24} md={18}>
@@ -338,7 +344,7 @@ function Menu(props) {
                                         <Row gutter={24}>
                                             <Col xs={24} sm={24} md={6}>
                                                 <Form.Group controlId="dari">
-                                                    <SelectPicker name="dari" data={kota} value={kotaAwal} onChange={(e) => setKotaAwal(e)} placeholder="Dari mana" block/>
+                                                    <SelectPicker name="dari" data={kota} value={kotaAwal} onChange={(e) => setKotaAwal(e)} placeholder="Dari mana" style={{ background: props.darkMode ? '#2B2B2B' : '#fff' }} block/>
                                                 </Form.Group>
                                             </Col>
                                             <Col xs={24} sm={24} md={6}>
@@ -401,12 +407,34 @@ function Menu(props) {
             </Container>
 
             {/* MODAL */}
-            <Modal overflow={true} open={open} onClose={handleClose}>
+            <Modal backdrop={true} overflow={true} open={open} onClose={handleClose} theme="dark">
                 <Modal.Header>
-                <Modal.Title>Modal Title</Modal.Title>
+                <Modal.Title>Pilih Bus</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                <Placeholder.Paragraph rows={80} />
+                    <RadioTileGroup aria-label="Visibility Level">
+                    {DataBus.filter(bus => bus.status === 1).map((bus) => (
+                        <RadioTile label={bus.nama_bus} value={bus.id}>
+                            <Grid>
+                                <Row>
+                                    <Col xs={24} sm={24} md={4}>
+                                        <img />
+                                        <Badge content={bus.nomor_polisi}></Badge> <br />
+                                    </Col>
+                                    <Col xs={24} sm={24} md={4}>
+                                        Kursi Tersedia : {bus.jumlah_kursi} <br />
+                                    </Col>
+                                    <Col xs={24} sm={24} md={4}>
+                                        <span style={{ fontStyle: 'italic' }}>
+                                            {formatedPrice(bus.harga)}
+                                        </span> <br />
+                                        <Badge color="blue" content={bus.type}></Badge><br />
+                                    </Col>
+                                </Row>
+                            </Grid>
+                        </RadioTile>
+                    ))}
+                    </RadioTileGroup>
                 </Modal.Body>
                 <Modal.Footer>
                 <Button onClick={onNext} appearance="primary">
