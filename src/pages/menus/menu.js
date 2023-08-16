@@ -176,7 +176,7 @@ function Menu(props) {
         }
         return (
             <>
-                <Panel shaded style={{background: '#fff', marginTop: '20px'}}>
+                <Panel shaded style={{background: props.darkMode ? '#212121' :'#fff', marginTop: '20px', color : props.darkMode ? '#fff' : '#212121'}}>
                     <span>Pilih Kursi</span>
                     <Grid style={{ width: '100%', marginTop: '20px', marginBottom: '20px'}}>
                         <CheckboxGroup value={pilihKursi} onChange={handlePilihKursi}>
@@ -235,7 +235,7 @@ function Menu(props) {
             setPembayaran(e)
         }
         return(
-            <Panel shaded style={{background: '#fff', marginTop: '20px'}}>
+            <Panel shaded style={{background: props.darkMode ? '#212121' : '#fff', marginTop: '20px', color: props.darkMode ? '#fff' : '#212121'}}>
                 <span>Pilih Metode Pembayaran : </span>
                 <RadioTileGroup aria-label="Visibility Level" style={{ marginTop: '20px'}} value={pilihPembayaran} onChange={(e) => handlePilihPembayaran(e)}>
                     {apiPembayaran.map(item => (
@@ -391,7 +391,7 @@ function Menu(props) {
                                 <Pembayaran />
                             )}
                             {step === 3 && ( // Selesai
-                                <Panel shaded style={{background: '#fff', marginTop: '20px'}}>
+                                <Panel shaded style={{background: props.darkMode ? '#212121' : '#fff', marginTop: '20px', color: props.darkMode ? '#fff' : '#212121'}}>
                                     Selesai dan cetak tiket<br/>
                                     <Rate onChangeActive={setHoverValue}/>
                                     <span style={{ verticalAlign: 'top', lineHeight: '42px', display: 'inline-block'}}>{texts[hoverValue]}</span>
