@@ -268,11 +268,12 @@ function Menu(props) {
     
     const onSubmit = () => {
         let dataFormSubmit = {}
-        if (kotaTujuan !== '' && kotaAwal !== '' && pergi !== '' && pilihKursi !== '' && pilihPembayaran !== ''){
+        if (kotaTujuan !== '' && kotaAwal !== '' && pergi !== '' && pilihKursi !== '' && pilihPembayaran !== '' && pilihBus !== ''){
             dataFormSubmit = {
                 kota_awal : kotaAwal,
                 kota_tujuan : kotaTujuan,
                 pergi: pergi,
+                id_bus: pilihBus,
                 pulang: pulang,
                 kursi: pilihKursi,
                 pembayaran: pilihPembayaran
@@ -280,8 +281,8 @@ function Menu(props) {
             }
         }
 
-        console.log(kotaTujuan +' - ' + kotaAwal +' - '+ pergi +' - ' + pilihKursi + ' - ' + pilihPembayaran)
-        console.log(dataFormSubmit)
+        // console.log(kotaTujuan +' - ' + kotaAwal +' - '+ pergi +' - ' + pilihKursi + ' - ' + pilihPembayaran + ' - ' + pilihBus)
+        // console.log(dataFormSubmit)
 
         if (Object.values(dataFormSubmit).length === 0) {
             Swal.fire({
@@ -294,14 +295,49 @@ function Menu(props) {
             })
         } else {
             // Hit endpointnya
-            Swal.fire({
-                title: 'Info!',
-                text: 'Sebentar ya, backendnya lagi nunggu mood!',
-                icon: 'info',
-                confirmButtonText: 'Oke',
-                allowOutsideClick: false,
-                allowEscapeKey: false
-            })
+            const savePemesanan = async () => {
+                try {
+                    const response = await fetch(url + '/savetiket', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(dataFormSubmit),
+                    })
+                    
+                    if (response.ok) {
+                        Swal.fire({
+                            title: "error",
+                            text: 'Tiket berhasil di simpan',
+                            icon: 'success',
+                            showConfirmButton: false,
+                            timer: 1000,
+                            allowOutsideClick: false,
+                            allowEscapeKey: false
+                        })
+                    } else {
+                        Swal.fire({
+                            title: "error",
+                            text: 'Backendnya lagi belajar',
+                            icon: 'error',
+                            confirmButtonText: 'Oke',
+                            allowOutsideClick: false,
+                            allowEscapeKey: false
+                        })
+                    }
+                } catch(error) {
+                    Swal.fire({
+                        title: error,
+                        text: 'Backendnya masih error, lagi belajar make golang dia',
+                        icon: 'info',
+                        confirmButtonText: 'Oke',
+                        allowOutsideClick: false,
+                        allowEscapeKey: false
+                    })
+                }
+            }
+
+            savePemesanan()
         }
         console.log(dataFormSubmit);
     }
