@@ -25,6 +25,7 @@ function Menu(props) {
     const [DataKursi, setDataKursi] = useState();
     const [DataBus, setDataBus] = useState([]);
     const [pilihKursi, setPilihKursi] = useState([]);
+    const [pilihBus, setPilihBus] = useState('');
     const [pilihPembayaran, setPembayaran] = useState('');
     const [hoverValue, setHoverValue] = useState(3);
     const [open, setOpen] = useState(false);
@@ -305,6 +306,10 @@ function Menu(props) {
         console.log(dataFormSubmit);
     }
 
+    const funcPilihBus = (e) => {
+        setPilihBus(e)
+    }
+
     return(
         !props.IsLogin === true ? (
             <Navigate to="/" />
@@ -414,7 +419,7 @@ function Menu(props) {
                 <Modal.Body>
                     <RadioTileGroup aria-label="Visibility Level">
                     {DataBus.filter(bus => bus.status === 1).map((bus) => (
-                        <RadioTile label={bus.nama_bus} value={bus.id}>
+                        <RadioTile label={bus.nama_bus} value={bus.id} onChange={(e) => funcPilihBus(e)}>
                             <Grid>
                                 <Row>
                                     <Col xs={24} sm={24} md={4}>
@@ -437,7 +442,15 @@ function Menu(props) {
                     </RadioTileGroup>
                 </Modal.Body>
                 <Modal.Footer>
-                <Button onClick={onNext} appearance="primary">
+                <Button 
+                onClick={() => {
+                    if (pilihBus !== '') {
+                        onNext()
+                    } else {
+                        setPilihBus('')
+                    }
+                }}
+                appearance="primary">
                     Ok
                 </Button>
                 <Button onClick={handleClose} appearance="subtle">
