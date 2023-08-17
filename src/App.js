@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Container } from 'rsuite';
 import 'rsuite/dist/rsuite-no-reset.min.css';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import SignUp from './pages/signup.js';
 import SignIn from './pages/signin.js';
 import Home from './pages/home.js';
@@ -12,9 +12,16 @@ import RiwayatTransaksi from './pages/menus/riwayattransaksi.js';
 function App() {
   const[darkMode, setDarkMode] = useState(false)
   const [IsLogin, setIsLogin] = useState(false);
+
+  const session = sessionStorage.getItem('userData');
   
   // NAVIGASI
   const NavigationBar = () => {
+    if (session) {
+      setIsLogin(true)
+    } else {
+      setIsLogin(false)
+    }
     return (
       <Router>
         <Routes>
