@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import SideNavMenu from '../component/sideNavMenu';
 import NavbarMenu from '../component/navbarMenu';
 import image from '../../assets/images/default.jpg'
-import { Container, Panel, Steps, Checkbox, CheckboxGroup, Form, Button, Rate, SelectPicker, DatePicker, ButtonToolbar, Grid, Row, Col, Toggle, RadioTileGroup, RadioTile, Modal, Badge, FlexboxGrid } from 'rsuite';
+import { Container, Panel, Steps, Checkbox, CheckboxGroup, Form, Button, Rate, SelectPicker, DatePicker, ButtonToolbar, Grid, Row, Col, Toggle, RadioTileGroup, RadioTile, Modal, Badge, FlexboxGrid, PanelGroup } from 'rsuite';
 import SearchIcon from '@rsuite/icons/Search';
 import Swal from 'sweetalert2'
 import { Navigate, Link } from 'react-router-dom'
@@ -29,6 +29,10 @@ function Menu(props) {
     const [pilihPembayaran, setPembayaran] = useState('');
     const [hoverValue, setHoverValue] = useState(3);
     const [open, setOpen] = useState(false);
+    const [peopleModal, setPeopleModal] = useState(false);
+    const [name, setName] = useState('')
+    const [nik, setNik] = useState('')
+    const [ttl, setTTL] = useState('')
     let url = 'http://localhost:8080/pd/v1';
 
     useEffect(() => {
@@ -126,6 +130,7 @@ function Menu(props) {
         getBus()
     };
     const handleClose = () => setOpen(false);
+    const handleCloseModalDataPenumpang = () => setPeopleModal(false);
 
     const onChange = nextStep => {
         if (Object.values(dataForm).length !== 0) {
@@ -187,7 +192,7 @@ function Menu(props) {
                         <Button onClick={onPrevious} disabled={step === 0}>
                             Previous
                         </Button>
-                        <Button appearance="primary" color="violet" onClick={onNext}>
+                        <Button appearance="primary" color="violet" onClick={() => pilihKursi.length > 0 ? setPeopleModal(true) : onNext}>
                             <span>Next</span>
                         </Button>
                     </ButtonToolbar>
@@ -220,7 +225,6 @@ function Menu(props) {
     ]
 
     const formatedPrice = (price) => {
-        console.log(price)
         const formattedAmount = new Intl.NumberFormat('id-ID', {
             style: 'currency',
             currency: 'IDR'
@@ -268,21 +272,32 @@ function Menu(props) {
     
     const onSubmit = () => {
         let dataFormSubmit = {}
+        var timestampEpochPulang = 0;
+        console.log(pulang)
+        if (pulang !== undefined) {
+            var pulang = new Date(pulang);
+            var epoch = new Date(0);
+            var format = berangkat - epoch;
+            timestampEpochPulang = Math.floor(format / 1000);
+        }
         if (kotaTujuan !== '' && kotaAwal !== '' && pergi !== '' && pilihKursi !== '' && pilihPembayaran !== '' && pilihBus !== ''){
+            var berangkat = new Date(pergi);
+            var epoch = new Date(0);
+            var format = berangkat - epoch;
+            var timestampEpochDetik = Math.floor(format / 1000);
             dataFormSubmit = {
                 kota_awal : kotaAwal,
                 kota_tujuan : kotaTujuan,
-                pergi: pergi,
+                pergi: timestampEpochDetik,
                 id_bus: pilihBus,
-                pulang: pulang,
+                pulang: timestampEpochPulang,
                 kursi: pilihKursi,
                 pembayaran: pilihPembayaran
-
             }
         }
 
         // console.log(kotaTujuan +' - ' + kotaAwal +' - '+ pergi +' - ' + pilihKursi + ' - ' + pilihPembayaran + ' - ' + pilihBus)
-        // console.log(dataFormSubmit)
+        console.log(dataFormSubmit)
 
         if (Object.values(dataFormSubmit).length === 0) {
             Swal.fire({
@@ -344,6 +359,21 @@ function Menu(props) {
 
     const funcPilihBus = (e) => {
         setPilihBus(e)
+    }
+
+    // HANDLE SET DATA PENUMPANG
+    const handleSubmitDataPenumpang = () => {
+        let data_penumpang = {}
+        if (name !== '' && nik !== '' && ttl !== '') {
+            data_penumpang = {
+                'name': name,
+                'nik': nik,
+                'ttl': ttl,
+            }
+            setPeopleModal(false);
+        }
+        
+        return Object.values(data_penumpang).length === 0 ? data_penumpang = {} : onNext()
     }
 
     return(
@@ -490,6 +520,43 @@ function Menu(props) {
                     Ok
                 </Button>
                 <Button onClick={handleClose} appearance="subtle">
+                    Cancel
+                </Button>
+                </Modal.Footer>
+            </Modal>
+            {/* MODAL SET PEOPLE */}
+            <Modal backdrop={true} overflow={true} open={peopleModal} onClose={handleCloseModalDataPenumpang} theme="dark">
+                <Modal.Header>
+                <Modal.Title>Masukkan Data Penumpang</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <Form onSubmit={handleSubmitDataPenumpang()}>
+                        {/* Perlu di loop sebanyak jumlah kursi yg di check pilihKursi.length*/}
+                        <PanelGroup accordion defaultActiveKey={0} bordered>
+                        {pilihKursi.map((kursi, index) => (
+                            <Panel header={`Data Penumpang ${index + 1}`} eventKey={index} id="panel1">
+                                <Form.Group controlId="nik">
+                                    <Form.ControlLabel>NIK</Form.ControlLabel>
+                                    <Form.Control name="nik" onChange={(e) => setNik(e)}/>
+                                </Form.Group>
+                                <Form.Group controlId="name">
+                                    <Form.ControlLabel>Nama Lengkap</Form.ControlLabel>
+                                    <Form.Control name="name" onChange={(e) => setName(e)}/>
+                                </Form.Group>
+                                <Form.Group controlId="datePicker">
+                                    <Form.ControlLabel>Tempat Tanggal Lahir:</Form.ControlLabel>
+                                    <Form.Control name="datePicker" accepter={DatePicker} onChange={(e) => setTTL(e)}/>
+                                </Form.Group>
+                            </Panel>
+                        ))}
+                        </PanelGroup>
+                    </Form>
+                </Modal.Body>
+                <Modal.Footer>
+                <Button type="submit" appearance="primary">
+                    Submit
+                </Button>
+                <Button onClick={handleCloseModalDataPenumpang} appearance="subtle">
                     Cancel
                 </Button>
                 </Modal.Footer>
