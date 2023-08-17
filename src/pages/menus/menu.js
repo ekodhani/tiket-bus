@@ -30,9 +30,8 @@ function Menu(props) {
     const [hoverValue, setHoverValue] = useState(3);
     const [open, setOpen] = useState(false);
     const [peopleModal, setPeopleModal] = useState(false);
-    const [name, setName] = useState('')
-    const [nik, setNik] = useState('')
-    const [ttl, setTTL] = useState('')
+    const [name, setName] = useState([])
+    const [nik, setNik] = useState([])
     let url = 'http://localhost:8080/pd/v1';
 
     useEffect(() => {
@@ -361,19 +360,40 @@ function Menu(props) {
         setPilihBus(e)
     }
 
+    const handleNikChange = (index, value) => {
+        const updatedNik = [...nik];
+        updatedNik[index] = value;
+        setNik(updatedNik);
+    };
+
+    const handleNameChange = (index, value) => {
+        const updatedName = [...name];
+        updatedName[index] = value;
+        setName(updatedName);
+    };
+
     // HANDLE SET DATA PENUMPANG
-    const handleSubmitDataPenumpang = () => {
-        let data_penumpang = {}
-        if (name !== '' && nik !== '' && ttl !== '') {
-            data_penumpang = {
-                'name': name,
-                'nik': nik,
-                'ttl': ttl,
+    const handleSubmitDataPenumpang = (e) => {
+        let data_penumpang = [];
+
+        pilihKursi.map((kursi, index) => {
+            if (name !== '' && nik !== '') {
+                data_penumpang.push({
+                    name: name[index],
+                    nik: nik[index],
+                });
             }
+        })
+
+        if (data_penumpang.length > 0) {
+            // Lakukan sesuatu dengan data penumpang yang valid
+            console.log(data_penumpang);
             setPeopleModal(false);
+            onNext(); // Apa yang ingin Anda lakukan setelah mengumpulkan data penumpang?
+        } else {
+            // Tidak ada data penumpang yang valid
+            console.log("Tidak ada data penumpang yang valid");
         }
-        
-        return Object.values(data_penumpang).length === 0 ? data_penumpang = {} : onNext()
     }
 
     return(
@@ -526,31 +546,26 @@ function Menu(props) {
             </Modal>
             {/* MODAL SET PEOPLE */}
             <Modal backdrop={true} overflow={true} open={peopleModal} onClose={handleCloseModalDataPenumpang} theme="dark">
+                <Form onSubmit={(e) => handleSubmitDataPenumpang(e)}>
                 <Modal.Header>
                 <Modal.Title>Masukkan Data Penumpang</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <Form onSubmit={handleSubmitDataPenumpang()}>
                         {/* Perlu di loop sebanyak jumlah kursi yg di check pilihKursi.length*/}
                         <PanelGroup accordion defaultActiveKey={0} bordered>
                         {pilihKursi.map((kursi, index) => (
                             <Panel header={`Data Penumpang ${index + 1}`} eventKey={index} id="panel1">
                                 <Form.Group controlId="nik">
                                     <Form.ControlLabel>NIK</Form.ControlLabel>
-                                    <Form.Control name="nik" onChange={(e) => setNik(e)}/>
+                                    <Form.Control name="nik" onChange={(e) => handleNikChange(index, e)} required/>
                                 </Form.Group>
                                 <Form.Group controlId="name">
                                     <Form.ControlLabel>Nama Lengkap</Form.ControlLabel>
-                                    <Form.Control name="name" onChange={(e) => setName(e)}/>
-                                </Form.Group>
-                                <Form.Group controlId="datePicker">
-                                    <Form.ControlLabel>Tempat Tanggal Lahir:</Form.ControlLabel>
-                                    <Form.Control name="datePicker" accepter={DatePicker} onChange={(e) => setTTL(e)}/>
+                                    <Form.Control name="name" onChange={(e) => handleNameChange(index, e)} required/>
                                 </Form.Group>
                             </Panel>
                         ))}
                         </PanelGroup>
-                    </Form>
                 </Modal.Body>
                 <Modal.Footer>
                 <Button type="submit" appearance="primary">
@@ -560,6 +575,7 @@ function Menu(props) {
                     Cancel
                 </Button>
                 </Modal.Footer>
+                </Form>
             </Modal>
         </>
         )
