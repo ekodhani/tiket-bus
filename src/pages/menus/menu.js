@@ -32,6 +32,7 @@ function Menu(props) {
     const [peopleModal, setPeopleModal] = useState(false);
     const [name, setName] = useState([])
     const [nik, setNik] = useState([])
+    const [dataPenumpang, setDataPenumpang] = useState()
     let url = 'http://localhost:8080/pd/v1';
 
     useEffect(() => {
@@ -268,7 +269,8 @@ function Menu(props) {
         4: 'Good',
         5: 'Excellent'
     };
-    
+
+    // HANDLE ADM PEMESANAN TIKET
     const onSubmit = () => {
         let dataFormSubmit = {}
         var timestampEpochPulang = 0;
@@ -279,7 +281,7 @@ function Menu(props) {
             var format = berangkat - epoch;
             timestampEpochPulang = Math.floor(format / 1000);
         }
-        if (kotaTujuan !== '' && kotaAwal !== '' && pergi !== '' && pilihKursi !== '' && pilihPembayaran !== '' && pilihBus !== ''){
+        if (kotaTujuan !== '' && kotaAwal !== '' && pergi !== '' && pilihKursi !== '' && pilihPembayaran !== '' && pilihBus !== '' && dataPenumpang.length > 0){
             var berangkat = new Date(pergi);
             var epoch = new Date(0);
             var format = berangkat - epoch;
@@ -291,7 +293,8 @@ function Menu(props) {
                 id_bus: pilihBus,
                 pulang: timestampEpochPulang,
                 kursi: pilihKursi,
-                pembayaran: pilihPembayaran
+                pembayaran: pilihPembayaran,
+                data_penumpang: dataPenumpang
             }
         }
 
@@ -356,16 +359,19 @@ function Menu(props) {
         console.log(dataFormSubmit);
     }
 
+    // HANDLE PILIH BUS
     const funcPilihBus = (e) => {
         setPilihBus(e)
     }
 
+    // HANDLE SET NIK PENUMPANG
     const handleNikChange = (index, value) => {
         const updatedNik = [...nik];
         updatedNik[index] = value;
         setNik(updatedNik);
     };
 
+    // HANDLE SET NAME PENUMPANG
     const handleNameChange = (index, value) => {
         const updatedName = [...name];
         updatedName[index] = value;
@@ -385,7 +391,9 @@ function Menu(props) {
             }
         })
 
+        
         if (data_penumpang.length > 0) {
+            setDataPenumpang(data_penumpang)
             // Lakukan sesuatu dengan data penumpang yang valid
             console.log(data_penumpang);
             setPeopleModal(false);
