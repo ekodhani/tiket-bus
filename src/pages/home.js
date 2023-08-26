@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import { Content, Panel, Row, Col, Form, Button, ButtonToolbar, FlexboxGrid, Loader, DateRangePicker, SelectPicker, Avatar } from 'rsuite';
+import { Content, Panel, Row, Col, Form, Button, ButtonToolbar, FlexboxGrid, Loader, SelectPicker, Avatar, DatePicker, Toggle, Modal } from 'rsuite';
 import '../assets/css/home.css';
 import destinasiOne from '../assets/images/destinasi1.jpeg';
 import destinasiTwo from '../assets/images/destinasi2.jpeg';
@@ -12,12 +12,18 @@ import Girasol from '../assets/images/partner/girasol.jpg';
 import ADR from '../assets/images/partner/akudanrumah.jpg';
 import Navbars from './component/navbar';
 import DefaultImg from '../assets/images/default.jpg'
+import ModalDetail from './component/modalDetail'
 
 function Home(props) {
     const [dari, setDariMana] = useState('');
     const [ke, setKemana] = useState('');
-    const [rangeDate, setRangeDate] = useState([]);
+    const [startDate, setStartDate] = useState();
+    const [endDate, setEndDate] = useState();
     const [loading, setLoading] = useState(false);
+    const [pulangPergi, setPulangPergi] = useState(false);
+    const [open, setOpen] = useState(false);
+    const [dataBus, setDataBus] = useState([]);
+    let url = 'http://localhost:8080/pd/v1';
 
     // TESTIMONIAL SECTION
     const Testimonial = () => { 
@@ -72,7 +78,8 @@ function Home(props) {
             </>
         )
     }
-
+    
+    // PARTNER
     const Partner = () => {
         return(
             <>
@@ -119,7 +126,7 @@ function Home(props) {
     }
 
     // API KOTA
-    const kota = ['kota1', 'kota2'].map(item => ({
+    const kota = ['Tangerang', 'Purworejo'].map(item => ({
         label: item,
         value: item
     }));
@@ -127,11 +134,12 @@ function Home(props) {
     // MANIPULASI OBJEK
     let dataPencarian = {}
 
-    if (dari !== '' && ke !== '' && rangeDate.length !== 0) {
+    if (dari !== '' && ke !== '' && startDate !== '') {
         dataPencarian = {
-            dari_mana: dari,
-            kemana: ke,
-            range_date: rangeDate, // ini data array numeric
+            asal: dari,
+            tujuan: ke,
+            start: Math.floor(startDate / 1000), // ini data array numeric
+            end: Math.floor(endDate / 1000), // ini data array numeric
         }
     }
 
@@ -148,28 +156,53 @@ function Home(props) {
             })
             setLoading(false)
         } else {
-            Swal.fire({
-                title: 'Info!',
-                text: 'Backendnya masih ngopi dulu, tunggu ya',
-                icon: 'info',
-                confirmButtonText: 'Oke',
-                allowOutsideClick: false,
-                allowEscapeKey: false
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    setLoading(false)
+            console.log(dataPencarian)
+            const cariBus = async () => {
+                try {
+                    const response = await fetch(url + '/getBus', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(dataPencarian),
+                    })
+
+                    const result_bus = await response.json();
+                    setDataBus(result_bus);
+                    
+                    if (response.ok) {
+                        // Munculin Modal Detail Bus yg ada
+                        setOpen(true)
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: "Gagal Mendapatkan Bus",
+                            text: 'Bus blom tersedia',
+                            confirmButtonText: 'Oke',
+                            allowOutsideClick: false,
+                            allowEscapeKey: false
+                        })
+                    }
+                } catch(error) {
+                    Swal.fire({
+                        title: error,
+                        text: 'Backendnya masih error, lagi belajar make golang dia',
+                        icon: 'info',
+                        confirmButtonText: 'Oke',
+                        allowOutsideClick: false,
+                        allowEscapeKey: false
+                    })
                 }
-            })
-            console.log(dataPencarian);
-            setLoading(true)
+            }
+            // Run Get Bus
+            cariBus()
         }
     }
 
+    // HERO SECTION
+    const Hero = () => {
 
-
-    return (
-        <>
-            <Navbars darkmode={props.darkMode} setdarkmode={(e) => props.setdarkmode(e)}/>
+        return(
             <Content style={{ padding: '30px', background: props.darkMode ? '#171717' : ''}} className="top-section">
                 <Row className="show-grid center-image">
                     <Col xs={12}>
@@ -185,6 +218,13 @@ function Home(props) {
                     </Col>
                 </Row>
             </Content>
+        )
+    }
+
+    // TOP 3 DESTINATION
+    const TopDestination = () => {
+
+        return(
             <Content style={{ padding: '30px', background: props.darkMode ? '#171717' : '#f5f5f5'}}>
                 <Row>
                     <Col xs={24} sm={12} md={8}>
@@ -210,28 +250,56 @@ function Home(props) {
                     </Col>
                 </Row>
             </Content>
+        )
+    }
+
+    // SECTION SEARCH BUS
+    const SearchBus = () => {
+
+        return(
             <Content style={{ padding: '30px', background: props.darkMode ? '#171717' : '#f5f5f5'}}>
                 <FlexboxGrid justify="center" style={{ paddingTop: '50px' }}>
-                    <FlexboxGrid.Item colspan={12}>
+                    <FlexboxGrid.Item colspan={!pulangPergi ? 12 : 16}>
                         <Panel shaded style={{ background: props.darkMode ? '#2B2B2B' : '#fff'}}>
-                            <h3 style={{ color: props.darkMode ? '#aeaeae' : '#424242'}}>Mau Kemana ?</h3>
+                            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between'}}>
+                                <h3 style={{ color: props.darkMode ? '#aeaeae' : '#424242'}}>Mau Kemana ?</h3>
+                                <div>
+                                    <Toggle 
+                                    defaultChecked={pulangPergi} 
+                                    onChange={
+                                        () => {
+                                            setEndDate()
+                                            setPulangPergi(!pulangPergi)
+                                        }}
+                                    />
+                                    <span style={{ color: props.darkMode ? '#aeaeae' : '#333333', fontSize: '14px'}}> Pulang Pergi ?</span>
+                                </div>
+                            </div>
                             <Form fluid style={{ marginBottom: '20px'}} onSubmit={handleSubmit}>
                                 <Row>
-                                    <Col xs={8}>
+                                    <Col xs={!pulangPergi ? 8 : 6}>
                                         <Form.Group controlId="dari">
                                             <SelectPicker name="dari" style={{ background : props.darkMode ? '#4e4e4e' : ''}} data={kota} placeholder="Dari mana" block value={dari} onChange={(e) => setDariMana(e)}/>
                                         </Form.Group>
                                     </Col>
-                                    <Col xs={8}>
+                                    <Col xs={!pulangPergi ? 8 : 6}>
                                         <Form.Group controlId="ke">
                                             <SelectPicker name="ke" data={kota} style={{ background : props.darkMode ? '#4e4e4e' : ''}} placeholder="Ke mana" block value={ke} onChange={(e) => setKemana(e)}/>
                                         </Form.Group>
                                     </Col>
-                                    <Col xs={8}>
-                                        <Form.Group controlId="range">
-                                            <DateRangePicker placeholder="Rentang Waktu" style={{ background : props.darkMode ? '#4e4e4e' : ''}} name="range" block value={rangeDate} onChange={(e) => setRangeDate(e)} />
+                                    <Col xs={!pulangPergi ? 8 : 6}>
+                                        <Form.Group controlId="start">
+                                            <DatePicker placeholder="Tanggal Berangkat" style={{ background : props.darkMode ? '#4e4e4e' : ''}} name="start" block value={startDate} onChange={(e) => setStartDate(e)}/>
+                                            {/* <DateRangePicker placeholder="Rentang Waktu" style={{ background : props.darkMode ? '#4e4e4e' : ''}} name="range" block value={rangeDate} onChange={(e) => setRangeDate(e)} /> */}
                                         </Form.Group>
                                     </Col>
+                                    {pulangPergi && (
+                                        <Col xs={6}>
+                                            <Form.Group controlId="end">
+                                                <DatePicker placeholder="Tanggal Pulang" style={{ background : props.darkMode ? '#4e4e4e' : ''}} name="end" block value={endDate} onChange={(e) => setEndDate(e)} />
+                                            </Form.Group>
+                                        </Col>
+                                    )}
                                 </Row>
                                 <Form.Group style={{ marginTop: '20px'}}>
                                     <ButtonToolbar>
@@ -252,6 +320,20 @@ function Home(props) {
                     </FlexboxGrid.Item>
                 </FlexboxGrid>
             </Content>
+        )
+    }
+
+    // HANDLE CLOSE MODAL
+    const handleClose = () => {
+        setOpen(false)
+    }
+
+    return (
+        <>
+            <Navbars darkmode={props.darkMode} setdarkmode={(e) => props.setdarkmode(e)}/>
+            <Hero />
+            <TopDestination />
+            <SearchBus />
             <Content style={{ padding: '30px', background: props.darkMode ? '#171717' : ''}}>
                 <Testimonial />
             </Content>
@@ -262,6 +344,18 @@ function Home(props) {
                 <small style={{ color: '#666666'}}>Copyright &copy;</small><br />
                 <small style={{ color: '#666666'}}>Allright Reserved</small>
             </Content>
+
+
+            {/* MODAL HASIL PENCARIAN */}
+            <ModalDetail
+                isOpen={open}
+                isCloseModal={(e) => setOpen(e)} 
+                isClose={handleClose}
+                onDataBus={dataBus}
+                onSetDataBus={(e) => setDataBus(e)}
+                isLogin={props.IsLogin}
+            >
+            </ModalDetail>
         </>
     );
 }
