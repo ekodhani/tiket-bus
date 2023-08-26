@@ -19,6 +19,7 @@ function ModalDetail(props) {
     const bookingBus = () => {
         if (props.isLogin) {
             // BELOM MIKIRIN FLOWNYA GIMANA
+            // Mungkin lebih baik user akan masuk ke dalam menu dan masuk ke step milih kursi dan lanjutkan sampai selesai
             Swal.fire({
                 icon: 'info',
                 title: "Sebentar",
