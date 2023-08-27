@@ -41,7 +41,7 @@ function ModalDetail(props) {
 
     return (
         <>
-            <Modal open={props.isOpen} onClose={props.isClose}>
+            <Modal open={props.isOpen} onClose={props.isClose} backdrop={true} overflow={true} >
                 <Modal.Header>
                     <Modal.Title>Daftar Bus</Modal.Title>
                 </Modal.Header>
