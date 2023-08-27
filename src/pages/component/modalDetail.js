@@ -18,17 +18,8 @@ function ModalDetail(props) {
 
     const bookingBus = () => {
         if (props.isLogin) {
-            // BELOM MIKIRIN FLOWNYA GIMANA
-            // Mungkin lebih baik user akan masuk ke dalam menu dan masuk ke step milih kursi dan lanjutkan sampai selesai
-            Swal.fire({
-                icon: 'info',
-                title: "Sebentar",
-                text: 'Programmernya lagi mikirin flownya enaknya gimana ya ?',
-                confirmButtonText: 'Oke',
-                showCancelButton: true,
-                allowOutsideClick: false,
-                allowEscapeKey: false
-            })
+            // Buat Simple
+            navigate('/menu')
         } else {
             Swal.fire({
                 icon: 'question',
@@ -42,6 +33,7 @@ function ModalDetail(props) {
                 if (result.isConfirmed) {
                     props.isCloseModal(false)
                     navigate('/signin')
+                    // dan lanjut ke step pilih kursi
                 }
             })
         }
