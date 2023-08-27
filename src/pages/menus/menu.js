@@ -292,9 +292,9 @@ function Menu(props) {
                 pergi: timestampEpochDetik,
                 id_bus: pilihBus,
                 pulang: timestampEpochPulang,
-                kursi: pilihKursi,
                 pembayaran: pilihPembayaran,
-                data_penumpang: dataPenumpang
+                data_penumpang: dataPenumpang,
+                create_by : nama
             }
         }
 
@@ -387,6 +387,7 @@ function Menu(props) {
                 data_penumpang.push({
                     name: name[index],
                     nik: nik[index],
+                    kursi : kursi
                 });
             }
         })
