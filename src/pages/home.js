@@ -117,7 +117,11 @@ function Home(props) {
                             <h2 style={{ color: '#424242', textAlign: 'center'}}>Nikmati Perjalanan Tanpa Ribet, Pesan Tiketmu Sekarang!</h2>
                         </Col>
                         <Col xs={12} style={{ display: 'flex', alignItems: 'center', flexDirection: 'column'}}>
-                            <Button appearance="primary" color="violet" type="submit"><a href="/signup" style={{ color: '#fff', textDecoration: 'none'}}>Sign Up</a></Button>
+                            <Link to="/signup">
+                                <Button appearance="primary" color="violet" type="button">
+                                    <span style={{ color: '#fff', textDecoration: 'none'}}>Sign Up</span>
+                                </Button>
+                            </Link>
                         </Col>
                     </Row>
                 </Content>
