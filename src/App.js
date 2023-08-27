@@ -25,14 +25,38 @@ function App() {
     return (
       <Router>
         <Routes>
-          <Route path="/" element={<Home darkMode={darkMode} setdarkmode={(e) => setDarkMode(e)} IsLogin={IsLogin} setIsLogin={(e) => setIsLogin(e)} />}/>
-          <Route path="/signup" element={<SignUp darkMode={darkMode} setdarkmode={(e) => setDarkMode(e)}/>} />
-          <Route path="/signin" element={<SignIn darkMode={darkMode} setdarkmode={(e) => setDarkMode(e)} IsLogin={IsLogin} setIsLogin={(e) => setIsLogin(e)}/>} />
-          <Route path="/menu" element={<Menu darkMode={darkMode} setdarkmode={(e) => setDarkMode(e)} IsLogin={IsLogin} setIsLogin={(e) => setIsLogin(e)}/>} />
-          <Route path="/belumbayar" element={<BelumBayar darkMode={darkMode} setdarkmode={(e) => setDarkMode(e)} IsLogin={IsLogin} setIsLogin={(e) => setIsLogin(e)}/>} />
-          <Route path="/riwayattransaksi" element={<RiwayatTransaksi darkMode={darkMode} setdarkmode={(e) => setDarkMode(e)} IsLogin={IsLogin} setIsLogin={(e) => setIsLogin(e)}/>} />
-          <Route path="/rekomendasi" element={<Menu darkMode={darkMode} setdarkmode={(e) => setDarkMode(e)} IsLogin={IsLogin} setIsLogin={(e) => setIsLogin(e)}/>} />
-          <Route path="/logout" element={<Home darkMode={darkMode} setdarkmode={(e) => setDarkMode(e)} IsLogin={IsLogin} setIsLogin={(e) => setIsLogin(e)}/>} />
+          <Route 
+            path="/" 
+            element={<Home darkMode={darkMode} setdarkmode={(e) => setDarkMode(e)} IsLogin={IsLogin} setIsLogin={(e) => setIsLogin(e)} />}
+          />
+          <Route 
+            path="/signup" 
+            element={<SignUp darkMode={darkMode} setdarkmode={(e) => setDarkMode(e)}/>} 
+          />
+          <Route 
+            path="/signin" 
+            element={<SignIn darkMode={darkMode} setdarkmode={(e) => setDarkMode(e)} IsLogin={IsLogin} setIsLogin={(e) => setIsLogin(e)}/>} 
+          />
+          <Route 
+            path="/menu" 
+            element={<Menu darkMode={darkMode} setdarkmode={(e) => setDarkMode(e)} IsLogin={IsLogin} setIsLogin={(e) => setIsLogin(e)}/>} 
+          />
+          <Route 
+            path="/belumbayar" 
+            element={<BelumBayar darkMode={darkMode} setdarkmode={(e) => setDarkMode(e)} IsLogin={IsLogin} setIsLogin={(e) => setIsLogin(e)}/>} 
+          />
+          <Route 
+            path="/riwayattransaksi" 
+            element={<RiwayatTransaksi darkMode={darkMode} setdarkmode={(e) => setDarkMode(e)} IsLogin={IsLogin} setIsLogin={(e) => setIsLogin(e)}/>} 
+          />
+          <Route 
+            path="/rekomendasi" 
+            element={<Menu darkMode={darkMode} setdarkmode={(e) => setDarkMode(e)} IsLogin={IsLogin} setIsLogin={(e) => setIsLogin(e)}/>} 
+          />
+          <Route 
+            path="/logout" 
+            element={<Home darkMode={darkMode} setdarkmode={(e) => setDarkMode(e)} IsLogin={IsLogin} setIsLogin={(e) => setIsLogin(e)}/>} 
+          />
         </Routes>
       </Router>
     )
