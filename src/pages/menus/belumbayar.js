@@ -88,7 +88,7 @@ function BelumBayar(props) {
                         'Content-Type': 'application/json',
                     },
                     body: JSON.stringify({
-                        id : id
+                        id_user : id // karna menggunakan struct yang sama json yang di minta namenya id_user sebenarnya ini id_tiket
                     }),
                 })
                 if (!response.ok) {
