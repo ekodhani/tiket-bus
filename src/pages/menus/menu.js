@@ -75,7 +75,7 @@ function Menu(props) {
             }
         }
         getKursi()
-    }, [])
+    }, [url])
 
     const handleOpen = () => {
         var berangkat = new Date(pergi);
@@ -295,6 +295,7 @@ function Menu(props) {
                 id_bus: pilihBus,
                 pulang: timestampEpochPulang,
                 pembayaran: pilihPembayaran,
+                status_pembayaran: 0,
                 data_penumpang: dataPenumpang,
                 create_by : nama,
                 id_user : id_user
@@ -327,7 +328,7 @@ function Menu(props) {
                     
                     if (response.ok) {
                         Swal.fire({
-                            title: "error",
+                            title: "Sukses",
                             text: 'Tiket berhasil di simpan',
                             icon: 'success',
                             showConfirmButton: false,
@@ -359,7 +360,6 @@ function Menu(props) {
 
             savePemesanan()
         }
-        console.log(dataFormSubmit);
     }
 
     // HANDLE PILIH BUS
