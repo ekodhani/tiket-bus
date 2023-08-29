@@ -11,7 +11,9 @@ import FlexboxGridItem from "rsuite/esm/FlexboxGrid/FlexboxGridItem";
 
 function Menu(props) {
     const user = JSON.parse(sessionStorage.getItem('userData'))
+    console.log(user)
     let nama = user[0].nama
+    let id_user = user[0].id_log
     let img = user[0].image
     const [expanded, setExpanded] = useState(true);
     const [activeKey, setActiveKey] = useState('1');
@@ -294,7 +296,8 @@ function Menu(props) {
                 pulang: timestampEpochPulang,
                 pembayaran: pilihPembayaran,
                 data_penumpang: dataPenumpang,
-                create_by : nama
+                create_by : nama,
+                id_user : id_user
             }
         }
 
